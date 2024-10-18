@@ -6,32 +6,49 @@ using namespace std;
 
 int findme(string,char);
 int findme(string, string);
+string case_sensitivity_option_string(string, string);
+char case_sensitivity_option_char(char, string);
+
+
+string Choose_Sensi;
 
 int main()
 {
-    //test1
-    string defaltmessage = "all is okay";
-    char a = ' ';
-    string tryme = "el";
-
+     
+     //test1
+     string defaltmessage = "all is okay";
+     char a = 'I';
+     string tryme = "ALL";
+     // s for case-sensitive and ns for no case-sensitive (one credit - portfolio 1)
+     string option_Sens = "s";  
+    
     cout << "This is the string being compared: '" << defaltmessage << "' " << endl;
     
-    int rchar = findme(defaltmessage, a);
-    int rstri = findme(defaltmessage, tryme);
-    cout << "\nTEST 1: " << endl;
-    assert(rchar == 3);
-    cout << "Test succeeded!\nthe character '" << a << "' is found in index: " << rchar << endl;
-    assert(rstri == -1);
-    cout << "Test succeeded!\nthe substring '" << tryme << "' wasnot found, so value returned is: " << rstri << endl;
+    string new_tryme1 = case_sensitivity_option_string(tryme, option_Sens);
+    char new_a1 = case_sensitivity_option_char(a, option_Sens);
 
+    int rchar = findme(defaltmessage, new_a1);
+    int rstri = findme(defaltmessage, new_tryme1);
+    cout << "\nTEST 1 - case sensitive: " << endl;
+    assert(rchar == -1);
+    cout << "Test succeeded!\nthe character '" << a << "' was not found, so value returned is: " << rchar << endl;
+    assert(rstri == -1);
+    cout << "Test succeeded!\nthe substring '" << tryme << "' was not found, so value returned is: " << rstri << endl;
+
+   
+   
     //test2
     string defaltmessage2 = "all is okay";
-    char a2 = 'y';
-    string tryme2 = "kay";
+    char a2 = 'Y';
+    string tryme2 = "Kay";
+    string option_Sens2 = "ns"; 
 
-    int rchar2 = findme(defaltmessage2, a2);
-    int rstri2 = findme(defaltmessage2, tryme2);
-    cout << "\nTEST 2: " << endl;
+    string new_tryme2 = case_sensitivity_option_string(tryme2, option_Sens2);
+    char new_a2 = case_sensitivity_option_char(a2, option_Sens2);
+
+    int rchar2 = findme(defaltmessage2, new_a2);
+    int rstri2 = findme(defaltmessage2, new_tryme2);
+    cout << "\nTEST 2 - No case-sensitive: " << endl;
     assert(rchar2 == 10);
     cout << "Test succeeded!\nthe character '" << a2 << "' is found in index: " << rchar2 << endl;
     assert(rstri2 == 8);
@@ -39,66 +56,93 @@ int main()
 
     //test3
     string defaltmessage3 = "all is okay";
-    char a3 = 's';
-    string tryme3 = "is";
+    char a3 = 'O';
+    string tryme3 = "OKAY";
 
-    int rchar3 = findme(defaltmessage3, a3);
-    int rstri3 = findme(defaltmessage3, tryme3);
-    cout << "\nTEST 3: " << endl;
-    assert(rchar3 == 5);
-    cout << "Test succeeded!\nthe character '" << a3 <<  "' is found in index: " << rchar3 << endl;
-    assert(rstri3 == 4);
+    string new_tryme3 = case_sensitivity_option_string(tryme3, "ns");
+    char new_a3 = case_sensitivity_option_char(a3, "s");
+
+    int rchar3 = findme(defaltmessage3, new_a3);
+    int rstri3 = findme(defaltmessage3, new_tryme3);
+    cout << "\nTEST 3 - no case sensitive for string but case sensitive for char: " << endl;
+    assert(rchar3 == -1);
+    cout << "Test succeeded!\nthe character '" << a3 <<  "' was not found, so value returned is: " << rchar3 << endl;
+    assert(rstri3 == 7);
     cout << "Test succeeded!\nthe index where the substring '" << tryme3 <<  "' begins at: " << rstri3 << endl;
 
-    //test4
-    string defaltmessage4 = "all is okay";
-    char a4 = 'e';
-    string tryme4 = "All";
-
-    int rchar4 = findme(defaltmessage4, a4);
-    int rstri4 = findme(defaltmessage4, tryme4);
-    cout << "\nTEST 4: " << endl;
-    assert(rchar4 == -1);
-    cout << "Test succeeded!\nthe character '" << a4 << "' was not found, so value returned is: " << rchar4 << endl;
-    assert(tryme4 == -1);
-    cout << "Test succeeded!\nthe substring '" << tryme4 << "' was not found, so value returned is : " << rstri4 << endl;
-
+    
+ 
 
     return 0;
 
 }
 
-
-int findme(string _stringf, char a)
+string case_sensitivity_option_string(string tryme, string choose_Sensi)
 {
-    for (int i = 0; i < _stringf.length(); i++)
+    string new_tryme;
+    if (choose_Sensi == "ns")
     {
-            if (_stringf[i] == a)
-            {
+        for (char ch : tryme) {
+            new_tryme += tolower(ch);
+        }
+        return new_tryme;
 
+    }
+    else
+    {
+        new_tryme = tryme;
+        return new_tryme;
+
+    }
+}
+char case_sensitivity_option_char(char a,string choose_Sensi)
+{
+    char new_a;
+    if (choose_Sensi == "ns")
+    {
+        new_a = tolower(a);
+        return  new_a;
+    }
+    else
+    {
+        new_a = a;
+        return new_a;
+    }
+
+}
+
+int findme(string _stringf, char new_a)
+{
+    int lengthS = _stringf.length();
+
+    for (int i = 0; i < lengthS; i++)
+    {
+            if (_stringf[i] == new_a)
+            {
                 return i;
                 break;
             }
     }
     return -1;
 }
-int findme(string _stringf, string _tryme)
+int findme(string _stringf, string new_tryme)
 {
+
     int i = 0;
     int j = 0;
 
     while (_stringf[i] != '\0')
     {
-        if (_stringf[i] == _tryme[0])
+        if (_stringf[i] == new_tryme[0])
         {
            
             j = 1;
-            while (_tryme[j] != '\0' && _stringf[j + 1] != '\0')
+            while (new_tryme[j] != '\0' && _stringf[j + 1] != '\0')
             {
                 j++;
 
             }
-            if (_tryme[j] == '\0')
+            if (new_tryme[j] == '\0')
             {
                 return i;
             }
